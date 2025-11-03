@@ -1,0 +1,60 @@
+using UnityEngine;
+//Skript se nachází na kameře hráče.
+//Raycasty slouží k interakci s prostředím. 
+//Používají neviditelný paprsek, který někde začíná a má nějáký směr. Pokud paprsek trefí objekt s colliderem, vratí ho.
+//skrze právě jeho collider s objektem poté můžeme nějak pracovat. 
+//Objekty musí mít collider, aby je raycast registroval!
+public class RayScript : MonoBehaviour
+{
+    //nadeklarování paprsku
+    Ray ray;
+
+    //do této proměnné se ukládá trefený objekt
+    RaycastHit hit;
+
+    //Layermask fungují podobně jako tagy, pracují s nimi především fyzikální funkce Unity
+    //Layermask si musíme nastavit na komponentě tohoto skriptu v editoru
+    //Můžeme vybrat více layerů v jedné masce
+    public LayerMask mask;
+
+    //Sckript pro práci s UI a skóre
+    private UIManager _manager;
+
+    private void Start()
+    {
+        //hledáme komponentu typu UIManager ve scéně
+        _manager = FindAnyObjectByType<UIManager>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Každý frame vytvoříme paprsek na pozici objektu, na kterém je tento skript, paprsek míří směrem dopředu (podle osy Z)
+        ray = new Ray(transform.position, transform.forward);
+
+        //pokud stiskneme levé tlaćítko myši
+        if (Input.GetMouseButtonDown(0))
+        {
+            //rycast přijmá jako parametr paprsek, ze kterého přijmá informace
+            //vrací pomocí "out" objekt, který trefil
+            //omezuje vzdálenost na 10
+            //přijmá pouze objekty, které jsou nastaveny v layermask
+            if (Physics.Raycast(ray, out hit, 10f, mask))
+            {
+                //Pokud je na 3. layeru...
+                //Platí pro zdi (prefab wall4)
+                if (hit.collider.gameObject.layer == 3)
+                {
+                    hit.collider.gameObject.GetComponent<Renderer>().material.color = Color.red;
+                }
+                //Pokud je na 6. layeru...
+                //Platí pro knihy, co leží na lavicích
+                if (hit.collider.gameObject.layer == 6)
+                {
+                    _manager.addScore();
+                    Destroy(hit.collider.gameObject);
+                }
+            }
+        }
+    }
+}
