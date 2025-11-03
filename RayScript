@@ -41,8 +41,8 @@ public class RayScript : MonoBehaviour
             //přijmá pouze objekty, které jsou nastaveny v layermask
             if (Physics.Raycast(ray, out hit, 10f, mask))
             {
-                //Pokud je na 3. layeru...
-                //Platí pro zdi (prefab wall4)
+                //Pokud je na 3.layeru...
+                //Platí pro zdi(prefab wall4)
                 if (hit.collider.gameObject.layer == 3)
                 {
                     hit.collider.gameObject.GetComponent<Renderer>().material.color = Color.red;
