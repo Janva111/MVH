@@ -1,0 +1,38 @@
+using UnityEngine;
+
+public class BridgeScript : MonoBehaviour
+{
+    private bool _IsInside = false;
+    public GameObject Bridge;
+    public GameObject Player;
+    public Material Material;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            _IsInside = true;
+            Debug.Log("Vstoupil jsi do triggeru");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            _IsInside = false;
+            Debug.Log("Vystoupil jsi do triggeru");
+        }
+    }
+
+    private void Update()
+    {
+        
+        if (_IsInside && Input.GetKeyDown(KeyCode.E))
+        {
+            Bridge.SetActive(!Bridge.activeSelf);
+            Player.GetComponent<Renderer>().material = Material;
+            Debug.Log("zniceno pomoci e");
+        }
+    }
+}
