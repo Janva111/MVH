@@ -1,8 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    List<GameObject> targets = new();
+    public GameObject target;
+    private GameObject oldTarget;
+
     public void LoadNextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -17,4 +22,43 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    void Start()
+    {
+        FindTargets();
+    }
+
+    void FindTargets()
+    {
+        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+        
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.layer == 6)
+            {
+                targets.Add(obj);
+            }
+        }
+    }
+
+    public void SelectTarge()
+    {
+        if (targets.Count == 0)
+        {
+            Debug.Log("No more targets available.");
+            return;
+        }
+        if (targets.Count == 1)
+        {
+            target = targets[0];
+        }
+        int x;
+        do
+        {
+            x = Random.Range(0, targets.Count);
+        } while (targets[x] == oldTarget);
+
+        target = targets[x];
+        oldTarget = target;
+        Debug.Log("New target selected: " + target.name);
+    }
 }
