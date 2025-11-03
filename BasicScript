@@ -1,0 +1,49 @@
+using UnityEngine;
+
+public class BasicScript : MonoBehaviour
+{
+    //void Awake()
+    //{
+    //    Debug.Log("Awake called");
+    //}
+
+    //// Start is called once before the first execution of Update after the MonoBehaviour is created
+    //void Start()
+    //{
+    //    Debug.Log("Start called");
+    //}
+
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    Debug.Log("Update called");
+    //}
+
+    //--------------------------------------------------------------
+
+    //// Upright is called at a fixed interval and is independent of frame rate. Put physics code here.
+    //void FixedUpdate()
+    //{
+    //    Debug.Log("FixedUpdate called" + Time.fixedDeltaTime);
+    //}
+
+    //---------------------------------------------------------------
+
+    public Material matPurple;
+    public Material matYellow;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Renderer renderer = this.GetComponent<Renderer>();
+        renderer.material = matPurple;
+
+        Renderer otherRenderer = collision.gameObject.GetComponent<Renderer>();
+        otherRenderer.material = matYellow;
+
+        Debug.Log(collision.gameObject.name);
+
+
+
+    }
+
+}
