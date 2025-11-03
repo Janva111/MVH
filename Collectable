@@ -1,0 +1,57 @@
+using UnityEngine;
+
+public class Collectable : MonoBehaviour
+{
+    // sber objektu
+    PointManager pointManager;
+    GameObject bridge;
+    bool _IsInside = false;
+
+    private void Awake()
+    {
+        bridge = GameObject.Find("Bridge");
+    }
+
+    private void Start()
+    {
+        bridge.SetActive(false);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            _IsInside = true;
+            Debug.Log("Vstoupil jsi do triggeru");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            _IsInside = false;
+            Debug.Log("Vystoupil jsi do triggeru");
+        }
+    }
+    private void Update()
+    {
+        if (_IsInside && Input.GetKeyDown(KeyCode.E))
+        {
+            switch (gameObject.tag)
+            {
+                case "Bridge":
+                    bridge.SetActive(!bridge.activeSelf);
+                    Debug.Log("Bridge collected");
+                    break;
+                case "Point":
+                    pointManager = GameObject.Find("PointManager").GetComponent<PointManager>();
+                    pointManager.AddPoint();
+                    Destroy(gameObject);
+                    break;
+                default:
+                    Debug.LogWarning("Unknown collectable");
+                    break;
+            }
+        }
+    }
+}
