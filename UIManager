@@ -1,0 +1,18 @@
+using TMPro;
+using UnityEngine;
+
+public class UIManager : MonoBehaviour
+{
+    int score = 0;
+    public TMP_Text scoreText;
+
+    private void Start()
+    {
+        scoreText.text = $"Score: {score}";
+    }
+    public void addScore()
+    {
+        score++;
+        scoreText.text = $"Score: {score}";
+    }
+}
