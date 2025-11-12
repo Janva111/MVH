@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Threading;
+    using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +8,8 @@ public class GameManager : MonoBehaviour
     public GameObject Target { get; private set; }
     private GameObject oldTarget;
     UIManager UImanager;
+    private float _timer;
+    public float maxTime = 15f;
     public void LoadNextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -62,6 +63,15 @@ public class GameManager : MonoBehaviour
         Target = targets[x];
         oldTarget = Target;
         UImanager.UpdateTargetText(Target.name);
+    }
+
+    private void Update()
+    {
+        maxTime -= Time.deltaTime;
+        if (_timer<0) 
+        {
+            maxTime = 15f;
+        }
     }
 }
 
