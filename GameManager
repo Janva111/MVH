@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     List<GameObject> targets = new();
     public GameObject Target { get; private set; }
     private GameObject oldTarget;
+    UIManager UImanager;
     public void LoadNextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        UImanager = GameObject.Find("UIManager").GetComponent<UIManager>();
         FindTargets();
         SelectTarge();
     }
@@ -59,7 +61,7 @@ public class GameManager : MonoBehaviour
 
         Target = targets[x];
         oldTarget = Target;
-        Debug.Log("New target selected: " + Target.name);
+        UImanager.UpdateTargetText(Target.name);
     }
 }
 
