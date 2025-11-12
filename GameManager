@@ -1,13 +1,13 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     List<GameObject> targets = new();
-    public GameObject target;
+    public GameObject Target { get; private set; }
     private GameObject oldTarget;
-
     public void LoadNextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -25,9 +25,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         FindTargets();
+        SelectTarge();
     }
-
-    void FindTargets()
+    public void FindTargets()
     {
         GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
         
@@ -49,16 +49,17 @@ public class GameManager : MonoBehaviour
         }
         if (targets.Count == 1)
         {
-            target = targets[0];
+            Target = targets[0];
         }
         int x;
         do
         {
             x = Random.Range(0, targets.Count);
-        } while (targets[x] == oldTarget);
+        } while (targets[x] != oldTarget);
 
-        target = targets[x];
-        oldTarget = target;
-        Debug.Log("New target selected: " + target.name);
+        Target = targets[x];
+        oldTarget = Target;
+        Debug.Log("New target selected: " + Target.name);
     }
 }
+
