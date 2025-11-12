@@ -18,12 +18,14 @@ public class RayScript : MonoBehaviour
     public LayerMask mask;
 
     //Sckript pro práci s UI a skóre
-    private UIManager _manager;
+    private UIManager manager;
+    private GameManager gameManager;
 
     private void Start()
     {
         //hledáme komponentu typu UIManager ve scéně
-        _manager = FindAnyObjectByType<UIManager>();
+        manager = FindAnyObjectByType<UIManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
     }
 
     // Update is called once per frame
@@ -51,8 +53,18 @@ public class RayScript : MonoBehaviour
                 //Platí pro knihy, co leží na lavicích
                 if (hit.collider.gameObject.layer == 6)
                 {
-                    _manager.addScore();
-                    Destroy(hit.collider.gameObject);
+                    if(hit.collider.gameObject == gameManager.Target)
+                    {
+                        manager.AddScore();
+                        Destroy(hit.collider.gameObject);
+                        gameManager.SelectTarge();
+                    }
+                    else
+                    {
+                        manager.RemoveScore();
+                        Destroy(hit.collider.gameObject);
+                        gameManager.SelectTarge();
+                    }
                 }
             }
         }
