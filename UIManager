@@ -1,18 +1,48 @@
+using System;
+using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     int score = 0;
     public TMP_Text scoreText;
+    public Slider slider;
+    public TMP_Text target;
+    private GameManager gameManager;
 
     private void Start()
     {
         scoreText.text = $"Score: {score}";
+        gameManager = FindAnyObjectByType<GameManager>();
+        UpdateTargetText();
     }
-    public void addScore()
+
+    public void AddScore()
     {
         score++;
         scoreText.text = $"Score: {score}";
+        UpdateTargetText();
     }
+
+    public void RemoveScore()
+    {
+        score--;
+        scoreText.text = $"Score: {score}";
+        UpdateTargetText();
+    }
+
+    public void UpdateTargetText()
+    {
+        if (gameManager.Target != null)
+        {
+            target.text = $"Find the book: {gameManager.Target.name}";
+        }
+        else
+        {
+            target.text = "No target book!";
+        }
+    }
+
 }
