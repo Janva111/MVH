@@ -18,13 +18,11 @@ public class RayScript : MonoBehaviour
     public LayerMask mask;
 
     //Sckript pro práci s UI a skóre
-    private UIManager manager;
     private GameManager gameManager;
 
     private void Start()
     {
         //hledáme komponentu typu UIManager ve scéně
-        manager = FindAnyObjectByType<UIManager>();
         gameManager = FindAnyObjectByType<GameManager>();
     }
 
@@ -55,15 +53,13 @@ public class RayScript : MonoBehaviour
                 {
                     if(hit.collider.gameObject == gameManager.Target)
                     {
-                        manager.AddScore();
-                        Destroy(hit.collider.gameObject);
-                        gameManager.SelectTarge();
+                        UIManager.Instance.AddScore();
+                        GameManager.Instance.SelectTarge();
                     }
                     else
                     {
-                        manager.RemoveScore();
-                        Destroy(hit.collider.gameObject);
-                        gameManager.SelectTarge();
+                        UIManager.Instance.RemoveScore();
+                        GameManager.Instance.SelectTarge();
                     }
                 }
             }
