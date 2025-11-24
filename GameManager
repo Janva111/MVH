@@ -1,4 +1,5 @@
-    using System.Collections.Generic;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,9 +8,23 @@ public class GameManager : MonoBehaviour
     List<GameObject> targets = new();
     public GameObject Target { get; private set; }
     private GameObject oldTarget;
-    UIManager UImanager;
     private float _timer;
     public float maxTime = 15f;
+
+    public static GameManager Instance { get; set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     public void LoadNextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -26,14 +41,15 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        UImanager = GameObject.Find("UIManager").GetComponent<UIManager>();
         FindTargets();
         SelectTarge();
+        UIManager.Instance.SetMaxValueSlider(maxTime);
+        _timer = maxTime;
     }
     public void FindTargets()
     {
         GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
-        
+
         foreach (GameObject obj in allObjects)
         {
             if (obj.layer == 6)
@@ -58,19 +74,21 @@ public class GameManager : MonoBehaviour
         do
         {
             x = Random.Range(0, targets.Count);
-        } while (targets[x] != oldTarget);
+        } while (targets[x] == oldTarget);
 
         Target = targets[x];
         oldTarget = Target;
-        UImanager.UpdateTargetText(Target.name);
+        UIManager.Instance.UpdateTargetText(Target.name);
     }
 
     private void Update()
     {
-        maxTime -= Time.deltaTime;
-        if (_timer<0) 
+        _timer -= Time.deltaTime;
+        UIManager.Instance.SetValueSlider(_timer);
+        if (_timer <= 0)
         {
-            maxTime = 15f;
+            _timer = maxTime;
+            SelectTarge();
         }
     }
 }
