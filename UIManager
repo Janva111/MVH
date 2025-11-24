@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,21 @@ public class UIManager : MonoBehaviour
     public TMP_Text scoreText;
     public Slider slider;
     public TMP_Text target;
+
+    public static UIManager Instance { get;  set; }
+
+    public void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+    }
 
     private void Start()
     {
@@ -26,7 +42,12 @@ public class UIManager : MonoBehaviour
         scoreText.text = $"Score: {score}";
     }
 
-    public void SetSlider(float value)
+    public void SetMaxValueSlider(float value)
+    {
+        slider.maxValue = value;
+    }
+
+    public void SetValueSlider(float value)
     {
         slider.value = value;
     }
